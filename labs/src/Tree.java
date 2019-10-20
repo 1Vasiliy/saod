@@ -67,7 +67,20 @@ public abstract class Tree {
         return 1 + treeSize(node.getLeftChild()) + treeSize(node.getRightChild());
     }
 
+    public int treeSize(AVLnode node){
+        if (node == null){
+            return 0;
+        }
+        return 1 + treeSize(node.getLeftChild()) + treeSize(node.getRightChild());
+    }
+
     public int treeHeight(TreeNode node){
+        if (node == null){
+            return 0;
+        }
+        return 1 + Math.max(treeHeight(node.getLeftChild()), treeHeight(node.getRightChild()));
+    }
+    public int treeHeight(AVLnode node){
         if (node == null){
             return 0;
         }
@@ -81,7 +94,21 @@ public abstract class Tree {
         return node.getData() + treeSum(node.getLeftChild()) + treeSum(node.getRightChild());
     }
 
+    public int treeSum(AVLnode node){
+        if (node == null){
+            return 0;
+        }
+        return node.getData() + treeSum(node.getLeftChild()) + treeSum(node.getRightChild());
+    }
+
     private long lenSum(TreeNode node, long l)
+    {
+        if (node == null){
+            return 0;
+        }
+        return l + lenSum(node.getLeftChild(), l + 1) + lenSum(node.getRightChild(), l + 1);
+    }
+    private long lenSum(AVLnode node, long l)
     {
         if (node == null){
             return 0;
@@ -90,6 +117,11 @@ public abstract class Tree {
     }
 
     public double averageHeight()
+    {
+        return lenSum(root, 1) * 1.0 / treeSize(root);
+    }
+
+    public double averageHeight(AVLnode root)
     {
         return lenSum(root, 1) * 1.0 / treeSize(root);
     }
