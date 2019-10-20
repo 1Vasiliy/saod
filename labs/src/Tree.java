@@ -53,6 +53,13 @@ public abstract class Tree {
         else return  root.min();
     }
 
+    public AVLnode min(AVLnode root){
+        if (root == null){
+            return root;
+        }
+        else return  root.min();
+    }
+
     public int max(){
         if (root == null){
             return Integer.MAX_VALUE;

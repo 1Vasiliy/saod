@@ -33,4 +33,12 @@ public class AVLnode {
         }
     }
 
+    public AVLnode min(){
+        if (leftChild == null){
+            return this;
+        }
+        else
+            return leftChild.min();
+    }
+
 }

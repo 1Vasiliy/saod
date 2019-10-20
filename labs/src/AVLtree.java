@@ -118,4 +118,56 @@ public class AVLtree extends Tree{
         System.out.println("Average height of tree: " + averageHeight(root));
         System.out.println("==========================================");
     }
+
+
+
+
+
+    private AVLnode delete(AVLnode node, int value){
+        if(node == null) return null;
+
+        if(value > node.data){
+            node.rightChild = delete(node.rightChild, value);
+        }else if(value < node.data){
+            node.leftChild = delete(node.leftChild, value);
+        }else{
+            if(node.rightChild == null && node.leftChild == null){
+                node = null;
+            } else if(node.rightChild == null){
+                node.leftChild.father = node.father;
+                node = node.leftChild;
+            } else if(node.leftChild == null){
+                node.rightChild.father = node.father;
+                node = node.rightChild;
+            } else{
+                if(node.rightChild.leftChild == null){
+                    node.rightChild.leftChild = node.leftChild;
+                    node.rightChild.father = node.father;
+//                    node.rightChild.father = node.father;
+                    node.leftChild.father = node.rightChild;
+                    node = node.rightChild;
+                }else{
+                    AVLnode res = min(node.rightChild);
+                    node.data = res.data;
+//                    node.data = res.data;
+                    delete(node.rightChild, node.data);
+                }
+            }
+        }
+        if(node != null) {
+            node.h = treeHeight(node);
+            node.balance = balance(node);
+            if (node.balance == -2) {
+                node = leftRotation(node);
+            } else if (node.balance == 2) {
+                node = rightRotation(node);
+            }
+        }
+        return node;
+    }
+
+    public void delete(int value) {
+        root = delete(root, value);
+    }
+
 }

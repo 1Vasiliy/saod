@@ -1,8 +1,10 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        SearchTree recTree = new SearchTree();
+        Scanner scan = new Scanner(System.in);
+
         AVLtree tree = new AVLtree();
 
         Random rand = new Random(System.currentTimeMillis());
@@ -12,15 +14,14 @@ public class Main {
         for (int i = 0; i < intArray.length; i++) {
             intArray[i] = rand.nextInt(1000);
         }
-        recTree.insert(intArray);
         tree.insert(intArray);
 
-        System.out.println("Search tree:");
-        recTree.traverseInOder();
-        recTree.printInfo();
-
-        System.out.println("AVL tree:");
         tree.traverseInOder();
-        tree.printInfo();
+
+        for (int i = 0; i < 10; i++){
+            System.out.println();
+            tree.delete(scan.nextInt());
+            tree.traverseInOder();
+        }
     }
 }
