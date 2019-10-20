@@ -1,7 +1,6 @@
 public class AVLtree extends Tree{
     private AVLnode root = null;
 
-
     @Override
     public void insert(int[] values) {
         root = new AVLnode(values[0], null);
@@ -17,7 +16,22 @@ public class AVLtree extends Tree{
         }
     }
 
-    public AVLnode insert(AVLnode node, int value, AVLnode father) {
+    @Override
+    public void printInfo(){
+        System.out.println("\n==========================================");
+        System.out.println("Size of tree: " + treeSize(root));
+        System.out.println("Control sum of tree: " + treeSum(root));
+        System.out.println("Height of tree: " + treeHeight(root));
+        System.out.println("Average height of tree: " + averageHeight(root));
+        System.out.println("==========================================");
+    }
+
+    @Override
+    public void delete(int value) {
+        root = delete(root, value);
+    }
+
+    private AVLnode insert(AVLnode node, int value, AVLnode father) {
         if (node.data == value){
             return node;
         }
@@ -51,8 +65,6 @@ public class AVLtree extends Tree{
 
         return node;
     }
-
-
 
     public static int balance(AVLnode root){
         if(root.leftChild == null && root.rightChild == null) return 0;
@@ -109,20 +121,6 @@ public class AVLtree extends Tree{
         return root;
     }
 
-    @Override
-    public void printInfo(){
-        System.out.println("\n==========================================");
-        System.out.println("Size of tree: " + treeSize(root));
-        System.out.println("Control sum of tree: " + treeSum(root));
-        System.out.println("Height of tree: " + treeHeight(root));
-        System.out.println("Average height of tree: " + averageHeight(root));
-        System.out.println("==========================================");
-    }
-
-
-
-
-
     private AVLnode delete(AVLnode node, int value){
         if(node == null) return null;
 
@@ -143,13 +141,11 @@ public class AVLtree extends Tree{
                 if(node.rightChild.leftChild == null){
                     node.rightChild.leftChild = node.leftChild;
                     node.rightChild.father = node.father;
-//                    node.rightChild.father = node.father;
                     node.leftChild.father = node.rightChild;
                     node = node.rightChild;
                 }else{
                     AVLnode res = min(node.rightChild);
                     node.data = res.data;
-//                    node.data = res.data;
                     delete(node.rightChild, node.data);
                 }
             }
@@ -164,10 +160,6 @@ public class AVLtree extends Tree{
             }
         }
         return node;
-    }
-
-    public void delete(int value) {
-        root = delete(root, value);
     }
 
 }
