@@ -4,6 +4,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <queue>
 #include <termios.h>
 #include <unistd.h>
 
@@ -17,9 +18,11 @@ struct record {
   short int numOfPage;
 };
 
-void buildHeap(record vector[], record *index[], int, int);
-void heapSort(record vector[], record *index[]);
+std::queue<record *> binarySearch(record *arr[], int left, int right, int key);
+void buildHeapAuthor(record data[], record *index[], int, int);
+void buildHeapYear(record data[], record *index[], int, int);
+void heapSort(record data[], record *index[], int flag);
 void print(record *data[]);
 void print(record data[]);
 char *split(char *name);
-void kbhit();
+char kbhit();
