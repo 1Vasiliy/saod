@@ -1,34 +1,9 @@
 #include "functions.hpp"
-// Sorting by AUTHOR field
-void buildHeapAuthor(record data[], record *index[], int l, int r) {
-  record *x = index[l];
-  int i = l;
-  do {
-    int j = 2 * i + 1;
-    if (j > r) {
-      break;
-    }
-    if (j < r &&
-        strcmp(split(index[j + 1]->author), split(index[j]->author)) <= 0) {
-      ++j;
-    }
-    if (strcmp(split(x->author), split(index[j]->author)) <= 0) {
-      break;
-    }
-    index[i] = index[j];
-    i = j;
-  } while (true);
-  index[i] = x;
-}
 
-void heapSort(record data[], record *index[], int flag) {
+void heapSort(record data[], record *index[]) {
   int l = SIZE / 2 - 1;
   while (l >= 0) {
-    if (flag == 1) {
-      buildHeapAuthor(data, index, l, SIZE - 1);
-    } else
-      buildHeapYear(data, index, l, SIZE - 1);
-
+    buildHeap(data, index, l, SIZE - 1);
     --l;
   }
   int r = SIZE - 1;
@@ -37,15 +12,12 @@ void heapSort(record data[], record *index[], int flag) {
     index[0] = index[r];
     index[r] = temp;
     --r;
-    if (flag == 1) {
-      buildHeapAuthor(data, index, 0, r);
-    } else
-      buildHeapYear(data, index, 0, r);
+    buildHeap(data, index, 0, r);
   }
 }
 
 // Sorting by YEAR field
-void buildHeapYear(record data[], record *index[], int l, int r) {
+void buildHeap(record data[], record *index[], int l, int r) {
   record *x = index[l];
   int i = l;
   do {
@@ -53,13 +25,11 @@ void buildHeapYear(record data[], record *index[], int l, int r) {
     if (j > r) {
       break;
     }
-    // if (j < r && strcmp(split(index[j + 1]->author), split(index[j]->author))
-    // <= 0) {
-    if (j < r && index[j + 1]->year <= index[j]->year) {
+    // if (j < r && index[j + 1]->year <= index[j]->year) {
+    if (j < r && comparel(index[j], index[j + 1])) {
       ++j;
     }
-    // if (strcmp(split(x->author), split(index[j]->author)) <= 0) {
-    if (x->year <= index[j]->year) {
+    if (comparel(index[j], x)) {
       break;
     }
     index[i] = index[j];
@@ -134,9 +104,9 @@ std::queue<record *> binarySearch(record *arr[], int left, int right, int key) {
   while (true) {
     midd = (left + right) / 2;
 
-    if (key > arr[midd]->year)
+    if (key < arr[midd]->year)
       right = midd - 1;
-    else if (key < arr[midd]->year)
+    else if (key > arr[midd]->year)
       left = midd + 1;
     else
       break;
@@ -155,4 +125,128 @@ std::queue<record *> binarySearch(record *arr[], int left, int right, int key) {
   q.push(arr[midd]);
 
   return q;
+}
+
+// TESTING
+//
+
+/*
+void heapSORT(record data[], record *index[]) {
+  record *temp;
+  int r = SIZE - 1;
+  int i = 0;
+  for (int i = 1; i < SIZE; i++) {
+    buildHeap(index, i);
+  }
+
+  while (r != 1) {
+    i = 0;
+    temp = index[0];
+    index[0] = index[r];
+    index[r] = temp;
+    r--;
+
+    while (true) {
+      if ((i + 1) * 2 <= r) {
+        if (index[(i + 1) * 2 - 1]->year < index[(i + 1) * 2]->year) {
+          temp = index[(i + 1) * 2];
+          index[(i + 1) * 2] = index[i];
+          index[i] = temp;
+
+          i = (i + 1) * 2;
+        } else {
+          temp = index[(i + 1) * 2 - 1];
+          index[(i + 1) * 2 - 1] = index[i];
+          index[i] = temp;
+
+          i = (i + 1) * 2 - 1;
+        }
+      } else if ((i + 1) * 2 - 1 <= r &&
+                 index[(i + 1) * 2 - 1]->year < index[i]->year) {
+        temp = index[(i + 1) * 2 - 1];
+        index[(i + 1) * 2 - 1] = index[i];
+        index[i] = temp;
+
+        break;
+      } else {
+        break;
+      }
+    }
+  }
+}
+
+void buildHeap(record *index[], int r) {
+  record *temp;
+  int i = r;
+  int x;
+
+  while (i != 0) {
+    x = int((i + 1) / 2) - 1;
+
+    if (index[i]->year > index[x]->year) {
+      temp = index[x];
+      index[x] = index[i];
+      index[i] = temp;
+    }
+
+    i = x;
+  }
+}
+*/
+
+bool comparel(record *first, record *second) {
+
+  if (first->year > second->year) {
+    return true;
+  } else if (first->year == second->year &&
+             strcmp(split(first->author), split(second->author)) <= 0) {
+    return true;
+  }
+
+  return false;
+}
+
+// To heapify a subtree rooted with node i which is
+// an index in arr[]. n is size of heap
+void heapify(record *arr[], int n, int i) {
+  int largest = i;   // Initialize largest as root
+  int l = 2 * i + 1; // left = 2*i + 1
+  int r = 2 * i + 2; // right = 2*i + 2
+
+  // If left child is larger than root
+  // if (l < n && arr[l]->year > arr[largest]->year)
+  // largest = l;
+
+  if (l < n && comparel(arr[l], arr[largest]))
+    largest = l;
+
+  // If right child is larger than largest so far
+  // if (r < n && arr[r]->year > arr[largest]->year)
+  // largest = r;
+  if (r < n && comparel(arr[r], arr[largest]))
+    largest = r;
+
+  // If largest is not root
+  if (largest != i) {
+    std::swap(arr[i], arr[largest]);
+
+    // Recursively heapify the affected sub-tree
+    heapify(arr, n, largest);
+  }
+}
+
+// main function to do heap sort
+void heapSORT(record *arr[], int n) {
+  // Build heap (rearrange array)
+  for (int i = n / 2 - 1; i >= 0; i--)
+    heapify(arr, n, i);
+
+  // One by one extract an element from heap
+  for (int i = n - 1; i >= 0; i--) {
+    // Move current root to end
+    std::swap(arr[0], arr[i]);
+
+    // call max heapify on the reduced heap
+    heapify(arr, i, 0);
+  }
 }

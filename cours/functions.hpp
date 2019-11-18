@@ -19,9 +19,13 @@ struct record {
 };
 
 std::queue<record *> binarySearch(record *arr[], int left, int right, int key);
-void buildHeapAuthor(record data[], record *index[], int, int);
-void buildHeapYear(record data[], record *index[], int, int);
-void heapSort(record data[], record *index[], int flag);
+bool comparel(record *first, record *second);
+void buildHeap(record data[], record *index[], int, int);
+// void buildHeap(record *index[], int);
+void heapSort(record data[], record *index[]);
+// void heapSORT(record data[], record *index[]);
+void heapify(record *arr[], int n, int i);
+void heapSORT(record *arr[], int n);
 void print(record *data[]);
 void print(record data[]);
 char *split(char *name);
