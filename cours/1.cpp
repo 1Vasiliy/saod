@@ -77,37 +77,14 @@ int main() {
       std::cout << "Enter key for search: ";
       std::cin >> key;
 
-      std::queue<record *> q = binarySearch(indexDataYear, 0, SIZE - 1, key);
-
-      if (q.empty()) {
-        std::cout << "Not found" << '\n';
-        break;
-      }
-
-      while (!q.empty()) {
-        record *i = q.front();
-        q.pop();
-        // if (i == -1) {
-        //   std::cout << "Not found" << '\n';
-        //   break;
-        // }
-        //
-        // std::cout << i - 1 << ". " << indexDataYear[i - 1]->author << "|"
-        //           << indexDataYear[i - 1]->title << "|"
-        //           << indexDataYear[i - 1]->publisher << "|"
-        //           << indexDataYear[i - 1]->year << "|"
-        //           << indexDataYear[i - 1]->numOfPage << "|" << std::endl;
-        //
-        std::cout << i->author << "|" << i->title << "|" << i->publisher << "|"
-                  << i->year << "|" << i->numOfPage << "|" << std::endl;
-        //
-        // std::cout << i + 1 << ". " << indexDataYear[i + 1]->author << "|"
-        //           << indexDataYear[i + 1]->title << "|"
-        //           << indexDataYear[i + 1]->publisher << "|"
-        //           << indexDataYear[i + 1]->year << "|"
-        //           << indexDataYear[i + 1]->numOfPage << "|" << std::endl;
-      }
-      break;
+      queue q = binarySearch(indexDataYear, 0, SIZE - 1, key);
+      // std::cout << q.peek()->author << "|"
+      //           << q.peek()->title << "|"
+      //           << q.peek()->publisher << "|"
+      //           << q.peek()->year << "|"
+      //           << q.peek()->numOfPage << "|" << std::endl;
+      //
+      // break;
     }
     case 4: {
       exit(0);

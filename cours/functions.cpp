@@ -97,8 +97,8 @@ void print(record *data[]) {
   }
 }
 
-std::queue<record *> binarySearch(record *arr[], int left, int right, int key) {
-  std::queue<record *> q;
+queue binarySearch(record *arr[], int left, int right, int key) {
+  queue q;
   unsigned int midd = 0;
 
   while (true) {
@@ -120,9 +120,9 @@ std::queue<record *> binarySearch(record *arr[], int left, int right, int key) {
   }
 
   while (arr[midd]->year == arr[midd + 1]->year) {
-    q.push(arr[midd++]);
+    q.add(arr[midd++]);
   }
-  q.push(arr[midd]);
+  q.add(arr[midd]);
 
   return q;
 }
@@ -206,23 +206,15 @@ bool comparel(record *first, record *second) {
   return false;
 }
 
-// To heapify a subtree rooted with node i which is
-// an index in arr[]. n is size of heap
+
 void heapify(record *arr[], int n, int i) {
   int largest = i;   // Initialize largest as root
   int l = 2 * i + 1; // left = 2*i + 1
   int r = 2 * i + 2; // right = 2*i + 2
 
-  // If left child is larger than root
-  // if (l < n && arr[l]->year > arr[largest]->year)
-  // largest = l;
-
   if (l < n && comparel(arr[l], arr[largest]))
     largest = l;
 
-  // If right child is larger than largest so far
-  // if (r < n && arr[r]->year > arr[largest]->year)
-  // largest = r;
   if (r < n && comparel(arr[r], arr[largest]))
     largest = r;
 
@@ -230,23 +222,87 @@ void heapify(record *arr[], int n, int i) {
   if (largest != i) {
     std::swap(arr[i], arr[largest]);
 
-    // Recursively heapify the affected sub-tree
     heapify(arr, n, largest);
   }
 }
 
-// main function to do heap sort
 void heapSORT(record *arr[], int n) {
-  // Build heap (rearrange array)
   for (int i = n / 2 - 1; i >= 0; i--)
     heapify(arr, n, i);
 
-  // One by one extract an element from heap
   for (int i = n - 1; i >= 0; i--) {
-    // Move current root to end
     std::swap(arr[0], arr[i]);
 
-    // call max heapify on the reduced heap
     heapify(arr, i, 0);
   }
+}
+
+
+
+//Queue
+//
+// queue::queue(int size)
+// {
+// 	capacity = size;
+// 	front = 0;
+// 	rear = -1;
+// 	count = 0;
+// }
+
+void queue::remove()
+{
+	if (isEmpty())
+	{
+		std::cout << "UnderFlow\nProgram Terminated\n";
+		exit(EXIT_FAILURE);
+	}
+
+	std::cout << "Removing " << arr[front] << '\n';
+
+	front = (front + 1) % capacity;
+	count--;
+}
+
+void queue::add(record* item)
+{
+	if (isFull())
+	{
+		std::cout << "OverFlow\nProgram Terminated\n";
+		exit(EXIT_FAILURE);
+	}
+
+  std::cout << "Inserting " << item->author << "|"
+            << item->title << "|"
+            << item->publisher << "|"
+            << item->year << "|"
+            << item->numOfPage << "|" << std::endl;
+
+	rear = (rear + 1) % capacity;
+	arr[rear] = item;
+	count++;
+}
+
+record* queue::peek()
+{
+	if (isEmpty())
+	{
+		std::cout << "UnderFlow\nProgram Terminated\n";
+		exit(EXIT_FAILURE);
+	}
+	return arr[front];
+}
+
+int queue::size()
+{
+	return count;
+}
+
+bool queue::isEmpty()
+{
+	return (size() == 0);
+}
+
+bool queue::isFull()
+{
+	return (size() == capacity);
 }
